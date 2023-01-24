@@ -3,6 +3,7 @@ library(tidyr)
 library(gridExtra)
 library(shiny)
 
+data_frame <<- data.frame()
 
 # Data generator for a normal distribution:
 generate_samples_normal <- function() {
@@ -96,7 +97,7 @@ variance_interval_data_frame <- function(data_frame) {
 
 
 # Confidence interval data frame plot function:
-confidence_interval_plot <- function(interval_frame, line_intercept) { 
+confidence_interval_plot <- function(interval_frame, line_intercept) {
   plot <- ggplot() +  
     geom_pointrange(
       data = interval_frame,
@@ -225,11 +226,11 @@ server <- function(input, output, session) {
       mean_intercept <- 0
       
       if(input$distribution_type == "Normalny") {
-        data_frame <- generate_samples_normal()
+        data_frame <<- generate_samples_normal()
         mean_intercept <- mean_actual
       }
       else {
-        data_frame <- generate_samples_poisson()
+        data_frame <<- generate_samples_poisson()
         mean_intercept <- poisson_lambda
       }
       
@@ -244,22 +245,12 @@ server <- function(input, output, session) {
   result_variance <- eventReactive(
     input$start,
     {
-      #n_trial <<- input$n_trial_input
-      #n_sample <<- input$n_sample_input
-      #mean_actual <<- input$mean_actual_input
-      #variance_actual <<- input$variance_actual_input
-      #stddev_actual <<- sqrt(variance_actual)
-      #poisson_lambda <<- input$poisson_lambda_input
-      #variance_confidence <<- input$variance_confidence_input
-      
       variance_intercept <- 0
       
       if(input$distribution_type == "Normalny") {
-        data_frame <- generate_samples_normal()
         variance_intercept <- variance_actual
       }
       else {
-        data_frame <- generate_samples_poisson()
         variance_intercept <- poisson_lambda
       }
       
